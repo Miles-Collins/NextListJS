@@ -3,9 +3,9 @@ import Link from "next/link.js";
 export default function Page() {
   return (
     <div className="homePage">
-      {/* <Link href={"/cars"}>
+      <Link href={"/cars"}>
         <button>Cars</button>
-      </Link> */}
+      </Link>
       <div className="container-fluid m-auto grid grid-cols-3">
         <div className="tile bg-slate-500">
           <h1 className="tile-marker text-4xl">TailWind Test</h1>

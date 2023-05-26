@@ -1,20 +1,12 @@
-import { getCar } from "@/lib/cars.js";
+import { deleteCar, getCar, getCarPaths } from "@/lib/cars.js";
 import Link from "next/link";
 
 export async function getStaticPaths() {
-  const res = await fetch("https://sandbox.codeworksacademy.com/api/cars");
-  const cars = await res.json();
-  const paths = cars.map((car) => ({
-    params: { id: car.id },
-  }));
-  // console.log("[GETTING PATHS]", paths);
-  return { paths, fallback: false };
+  return await getCarPaths();
 }
 
 export async function getStaticProps({ params }) {
-  console.log("[PARAMS]", params.id);
   const car = await getCar(params.id);
-  console.log("[GETTING CAR]", car);
   return {
     props: {
       car,
@@ -22,24 +14,10 @@ export async function getStaticProps({ params }) {
   };
 }
 
-// export async function getStaticProps({ params }) {
-//   const res = await fetch(
-//     `https://sandbox.codeworksacademy.com/api/cars/${params.id}`,
-//     { method: "GET" }
-//   );
-//   const car = await res.json();
-//   console.log("[c]", car);
-//   return { props: car };
-// }
-
-// async function DeleteCar(id) {
-//   console.log("Delete", id);
-//   const res = await fetch(
-//     `https://sandbox.codeworksacademy.com/api/cars/${id}`,
-//     { method: "DELETE" }
-//   );
-//   console.log("[DELETING CAR]", res.json());
-// }
+async function DeleteCar(id) {
+  const res = await deleteCar(id);
+  console.log("DELETED CAR", res);
+}
 
 export default function CarPage({ car }) {
   console.log("[CAR]", car);
@@ -51,7 +29,7 @@ export default function CarPage({ car }) {
         </button>
       </Link>
       <button
-        // onClick={() => DeleteCar(id)}
+        onClick={() => DeleteCar(car?.id)}
         className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow mt-5 mx-2"
       >
         Delete Car

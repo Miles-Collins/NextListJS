@@ -1,39 +1,12 @@
+import { getCars } from "@/lib/cars.js";
 import Link from "next/link.js";
 import React from "react";
 
-async function GetCars() {
-  const res = await fetch("https://sandbox.codeworksacademy.com/api/cars");
-
-  if (!res.ok) {
-    throw new Error("Something went wrong with the fetch.");
-  }
-  console.log(res);
-  return await res.json();
-}
-
 export async function getStaticProps() {
-  console.log("Getting cars");
-  const res = await fetch("https://sandbox.codeworksacademy.com/api/cars");
-
-  if (!res.ok) {
-    throw new Error("Something went wrong with the fetch.");
-  }
-
-  const cars = await res.json();
-  // console.log(cars);
-  return {
-    props: {
-      cars,
-    },
-  };
+  return await getCars();
 }
 
 export default function CarsPage({ cars }) {
-  // console.log(cars);
-  // const cars = await GetCars();
-  // await console.log("[CARS DATA]", carsData);
-  // const cars = await Promise.all(carsData);
-
   return (
     <div className="carsPage">
       <div className="grid grid-cols-6 mx-5">
@@ -41,11 +14,10 @@ export default function CarsPage({ cars }) {
           Sell Car
         </button>
       </div>
-      {cars}
       <div className="grid grid-cols-4 gap-5 justify-around p-5 ">
         {cars.map((c) => (
           <div key={c.id} className="shadow-md">
-            <Link href={{ pathname: `/cars/${c.id}`, query: `${c.id}` }}>
+            <Link href={{ pathname: `/cars/${c.id}` }}>
               <img
                 className="object-cover hover:object-scale-down h-48 w-96 rounded"
                 src={c.imgUrl}
